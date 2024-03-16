@@ -6,7 +6,7 @@ Tällä viikolla tutkin aiheideoita ja valitsin itselleni mielenkiintoisen aihee
 Alustin projektille repositorion Githubiin ja rekisteröin sen Labtooliin. Latasin poetryn ja pylintin sekä kertasin yksikkötestien tekemistä. 
 Tutkin minmax-algoritmin toimintaa ja opin ymmärtämään sitä paremmin. Kirjoitin määrittelydokumentin ja aloin suunnitella ja hahmottaa ohjelmaani paperille.  
 
-##Tuntikirjanpito
+## Tuntikirjanpito
 
 | Päivä | Käytetty aika |             Kuvaus              |
 | :---: | :-----------: |  :----------------------------: |
