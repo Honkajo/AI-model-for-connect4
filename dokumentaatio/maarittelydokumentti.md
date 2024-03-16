@@ -4,7 +4,7 @@ Opinto-ohjelma: Tietojenkäsittelytieteen kandidaatintutkinto
 
 Dokumentaation kieli: suomi
 
-# Ohjelmointikielet
+## Ohjelmointikielet
 
 Käytän ohjelmointikielenäni Pythonia ja voin arvioida sekä suomen- että englanninkielisiä töitä. Muita varsinaisia ohjelmointikieliä en hallitse tarpeeksi, jotta voisin vertaisarvioida niitä.
 
