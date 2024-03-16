@@ -26,6 +26,7 @@ Kun minmax-algoritmia käytetään alpha-beta karsinnalla, aikavaativuus on O(b<
 ## Algoritmit
 
 [Minmax-algoritmi](https://en.wikipedia.org/wiki/Minimax)
+
 [Alpha-beta-karsinta](https://en.wikipedia.org/wiki/Alpha-beta_pruning)
 
 
