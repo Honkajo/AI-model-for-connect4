@@ -14,7 +14,7 @@ Projektin tavoitteena on luoda tekoälyvastustaja Connect4-peliin. Toteutan teko
 
 Ongelmat, joita tämä projekti pyrkii ratkaisemaan painottuvat tekoälyn optimointiin. 
 
-+ Tavoitteena on
+Tavoitteena on
     * pyrkiä karsimaan mahdollisimman paljon turhia siirtoja tekoälyn arvioinnista
     * järjestää mahdolliset siirrot järkevästi(aloitetaan keskeltä ja edetään reunoja kohti) 
     * pyrkiä tehostamaan iteratiivista syvenemistä niin pitkälle kuin aikarajan puitteissa on mahdollista.
