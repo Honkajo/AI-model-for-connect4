@@ -10,7 +10,7 @@ Käytän ohjelmointikielenäni Pythonia ja voin arvioida sekä suomen- että eng
 
 ## Tavoite
 
-Projektin tavoitteena on luoda tekoälyvastustaja Connect4-peliin. Tekoälyn tarkoituksena on löytää jokaiseen pelitilanteeseen paras mahdollinen siirto nopeasti. Toteutan tekoälyn minmax-algoritmilla, jota on tehostettu alpha-beta-karsinnalla.Aion hyödyntää hajautustauluja pelitilanteiden tallentamiseen. Ohjelma tulee saamaan tietoa pelistä erilaisten syötteiden kautta. Näitä syötteitä ovat mm. pelilaudan visualisaatio nykyisessä pelitilanteessa, syvyysrajoitus siirtojen arviontiin sekä alpha-beta-arvot.
+Projektin tavoitteena on luoda tekoälyvastustaja Connect4-peliin. Tekoälyn tarkoituksena on löytää jokaiseen pelitilanteeseen paras mahdollinen siirto nopeasti. Toteutan tekoälyn minmax-algoritmilla, jota on tehostettu alpha-beta-karsinnalla. Ohjelma tulee saamaan tietoa pelistä erilaisten syötteiden kautta. Näitä syötteitä ovat mm. pelilaudan visualisaatio nykyisessä pelitilanteessa, syvyysrajoitus siirtojen arviontiin sekä alpha-beta-arvot. Aion myös hyödyntää hajautustauluja pelitilanteiden tallentamiseen. 
 
 Ongelmat, joita tämä projekti pyrkii ratkaisemaan painottuvat tekoälyn optimointiin. 
 
