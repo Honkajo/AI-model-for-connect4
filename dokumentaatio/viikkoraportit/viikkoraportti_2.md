@@ -1,6 +1,6 @@
 # Viikkoraportti 2
 
-**Käytetty tuntimäärä**: 5h
+**Käytetty tuntimäärä**: 10h
 
 
 
