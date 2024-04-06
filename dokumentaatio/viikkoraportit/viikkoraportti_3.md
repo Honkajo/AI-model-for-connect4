@@ -12,4 +12,4 @@ testeissä on vielä puutteita, mutta hoidan ne kuntoon ensi viikolla.
 | Päivä | Käytetty aika |             Kuvaus                                        |
 | :---: | :-----------: |  :----------------------------:                           |
 | 5.4.  |      4h       |  Pelin pelattavuuden toteuttaminen                        |
-| 21.3. |      4h       | Tekoälypelaajan siirtojen arviontifunktion suunnittelu    |
+| 6.4.  |      4h       | Tekoälypelaajan siirtojen arviontifunktion suunnittelu    |
