@@ -1,6 +1,7 @@
 # Viikkoraportti 3
 
 **Käytetty tuntimäärä**: 8h
+
 Tällä viikolla olen suunnitellut tekoälypelaajan siirtojen arviontikriteetejä paperilla, mutta en ole vielä toteuttanut toiminnallisuutta ohjelmaani täysin. Olen kuitenkin saanut aikaiseksi toimivan pelin, 
 jossa siirrot toteutetaan ja pelilaudan tilanne esitetään pelaajalle ennen seuraavaa siirtoa. Peliin on myös lisätty tarkistus pelin lopettamisesta ja lopussa annetaan ilmoitus voittajasta. Koodin dokumentaatiossa ja 
 testeissä on vielä puutteita, mutta hoidan ne kuntoon ensi viikolla. 
