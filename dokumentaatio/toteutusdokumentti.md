@@ -5,4 +5,5 @@ Ohjelmisto toteutetaan kolmessa moduulissa: käyttöliittymä, algoritmi sekä p
 ## Puutteita
 
 -Tekoälyn siirtoanalyysien aikakatkaisu
+
 -Evaluointifunktion tehokas toiminta
