@@ -45,7 +45,8 @@ class Connect4:
         """
         valid_moves = [col for col in self.preferred_cols if self.is_valid_move(col)]
         if depth == 0 or self.is_game_over() or not valid_moves:
-            return None, self.evaluate_position()
+            evaluation = self.evaluate_position()
+            return None, evaluation
         
         if maximizingPlayer:
             max_eval = float('-inf')
@@ -242,13 +243,13 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 1000
+                        scores[current] += 999999999
                     elif count >= 2:
                         scores[current] += count
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 1000
+                scores[current] += 999999999
             elif count >= 2:
                 scores[current] += count
         return scores
@@ -269,13 +270,13 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 1000
+                        scores[current] += 999999999
                     elif count >= 2:
                         scores[current] += count
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 1000
+                scores[current] += 999999999
             elif count >= 2:
                 scores[current] += count
         return scores
@@ -288,28 +289,71 @@ class Connect4:
         """
         horizontal_scores = self.horizontal_score()
         vertical_scores = self.vertical_score()
+        diagonal_scores = self.diagonal_score()
+        threats = self.detect_immediate_threats()
 
-        combined_scores = {1: horizontal_scores[1] + vertical_scores[1], 2: horizontal_scores[2] + vertical_scores[2]}
+        combined_scores = {1: horizontal_scores[1] + vertical_scores[1] + diagonal_scores[1] + threats[1], 
+                           2: horizontal_scores[2] + vertical_scores[2] + diagonal_scores[2] + threats[2]}
         score_difference = combined_scores[1] - combined_scores[2]
         return score_difference
+    
+    def detect_immediate_threats(self):
+        """Finds chains of 3 same player tokens and evaluates them as immediate threats that should be blocked.
 
 
+        Returns:
+            Dictionary: shows scores for both players after all checks
+        """
+        scores = {1: 0, 2: 0}
+        
+        for row in self.board:
+            for col in range(4):
+                for player in [1, 2]:
+                    if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
+                        scores[player] += 50000
 
-"""
+        for col in range(7):
+            for row in range(3):
+                for player in [1, 2]:
+                    tokens = [self.board[row+i][col] for i in range(4)]
+                    if tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 50000
+
+        for row in range(3, 6):
+            for col in range(4):
+                for player in [1,2]:
+                    tokens = [self.board[row-i][col+i] for i in range(4)]
+                    if tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 50000
+        
+        for row in range(3):
+            for col in range(4):
+                for player in [1, 2]:
+                    tokens = [self.board[row+i][col+i] for i in range(4)]
+                    if tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 50000
+
+        return scores
+
+
     def diagonal_score(self):
+        """Calculates scores by chains of same tokens for both players in current board state
+
+        Returns:
+            Dictionary: shows scores of both players from diagonal check
+        """
         scores = {1: 0, 2: 0}
         handled_positive = set()
         handled_negative = set()
 
         def process_chain(cells, player, handled):
             if len(cells) >= 4:
-                scores[player] += 1000
+                scores[player] += 999999999
             elif len(cells) >= 2:
                 scores[player] += len(cells)
             handled.update(cells)
         
-        for row in range(6):
-            print(scores)
+        for row in reversed(range(6)):
             for col in range(7):
                 current_player = self.board[row][col]
                 if current_player != 0:
@@ -332,16 +376,14 @@ class Connect4:
                     while r < 6 and c < 7:
                         if self.board[r][c] == current_player and (r, c) not in handled_negative:
                             negative_slope.append((r, c))
-                            r += 1
-                            c += 1
+                            r -= 1
+                            c -= 1
                         else:
                             break
                     if len(negative_slope) >= 2:
                         process_chain(negative_slope, current_player, handled_negative)
 
         return scores
-"""
-
 
 
 if __name__ =="__main__":
