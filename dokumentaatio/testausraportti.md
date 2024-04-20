@@ -1,5 +1,5 @@
 # Yksikkötestaus
-.
+
 Yksikkötestauksessa käytetään Unittest-kehystä. Testeissä testataan monipuolisesti käyttöliittymää, algoritmia sekä pelilogiikkaa erilaisilla syötteillä.
 
 ## Testikattavuus
