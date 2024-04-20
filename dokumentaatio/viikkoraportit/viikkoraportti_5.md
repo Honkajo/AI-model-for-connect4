@@ -13,6 +13,6 @@ Algoritmissani on ongelma, jota en ole vielä saanut ratkaistua yrityksistä huo
 | Päivä | Käytetty aika |             Kuvaus                                                              |
 | :---: | :-----------: |  :----------------------------:                                                 |
 | 17.4.  |      4h       | Vinottaissuuntaisen pisteytyksen korjaus toimivaksi                            |
-| 19.4.  |      2h       | Vastustaja uhkatilanteiden huomioon ottamisen suunnittelu evaluointifunktioon  |
+| 19.4.  |      2h       | Vastustajan uhkatilanteiden huomioon ottamisen suunnittelu evaluointifunktioon  |
 | 19.4.  |      4h       | Testien laajennus ja koodin debuggaus                                          |
 | 20.4.  |      6h       | Evaluointifunktion jatkokehitys, testien lisääminen sekä debuggaus             |
