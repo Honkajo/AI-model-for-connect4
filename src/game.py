@@ -1,4 +1,5 @@
 import random
+import time
 
 class Connect4:
     """Class that creates a game of connect4
@@ -113,7 +114,10 @@ class Connect4:
 
                 break
             if current_turn == "ai":
-                chosen_col, _ = self.minmax(3, float('-inf'), float('inf'), True)
+                start_time = time.time()
+                chosen_col, _ = self.minmax(8, float('-inf'), float('inf'), True)
+                end_time = time.time()
+                print(f"Aikaa kului: {end_time - start_time}")
                 self.make_move(chosen_col + 1, "ai")
                 print("AI has made its move:")
                 self.print_board()
@@ -131,16 +135,6 @@ class Connect4:
                         print("Invalid move. Try again!")
                 except ValueError:
                     print("Please enter a number between 1 and 7")
-
-    def ai_move(self):
-        """Used to make a random move for the ai-player
-        """
-        valid_move = False
-        while not valid_move:
-            chosen_col = random.randint(1, 7)
-            if self.is_valid_move(chosen_col - 1):
-                valid_move = True
-        self.make_move(chosen_col, "ai")
 
     def is_valid_move(self, col):
         """Checks if move for the column is possible to make
@@ -215,18 +209,6 @@ class Connect4:
         if count == 42:
             return True
         return False
-
-    def remove_ai_move(self, col):
-        """Used to remove ai move when generating all possible moves for algorithm to choose from
-
-        Args:
-            col (int): Column number
-        """
-        col -= 1
-        for i in range(6):
-            if self.board[i][col] == 1:
-                self.board[i][col] = 0
-                break
     
     def horizontal_score(self):
         """Calculates chains of 2 or more same player tokens in horizontal direction
@@ -252,6 +234,7 @@ class Connect4:
                 scores[current] += 999999999
             elif count >= 2:
                 scores[current] += count
+        
         return scores
     
     def vertical_score(self):
