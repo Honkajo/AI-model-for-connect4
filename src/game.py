@@ -26,7 +26,7 @@ class Connect4:
         Returns:
             Row that is not full yet or if there are no free rows in that column, then it returns None
         """
-        for row in range(6):
+        for row in range(5, -1, -1):
             if self.board[row][col] == 0:
                 return row
         return None
