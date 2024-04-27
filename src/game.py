@@ -114,10 +114,7 @@ class Connect4:
 
                 break
             if current_turn == "ai":
-                start_time = time.time()
-                chosen_col, _ = self.minmax(8, float('-inf'), float('inf'), True)
-                end_time = time.time()
-                print(f"Aikaa kului: {end_time - start_time}")
+                chosen_col, _ = self.minmax(5, float('-inf'), float('inf'), True)
                 self.make_move(chosen_col + 1, "ai")
                 print("AI has made its move:")
                 self.print_board()
@@ -227,13 +224,13 @@ class Connect4:
                     if count >= 4:
                         scores[current] += 999999999
                     elif count >= 2:
-                        scores[current] += count
+                        scores[current] += (count*10000)
                     current = cell
                     count = 1
             if count >= 4:
                 scores[current] += 999999999
             elif count >= 2:
-                scores[current] += count
+                scores[current] += (count*10000)
         
         return scores
     
@@ -255,13 +252,13 @@ class Connect4:
                     if count >= 4:
                         scores[current] += 999999999
                     elif count >= 2:
-                        scores[current] += count
+                        scores[current] += (count*10000)
                     current = cell
                     count = 1
             if count >= 4:
                 scores[current] += 999999999
             elif count >= 2:
-                scores[current] += count
+                scores[current] += (count*10000)
         return scores
     
     def evaluate_position(self):
@@ -273,14 +270,14 @@ class Connect4:
         horizontal_scores = self.horizontal_score()
         vertical_scores = self.vertical_score()
         diagonal_scores = self.diagonal_score()
-        threats = self.detect_immediate_threats()
+        threats = self.detect_threats()
 
         combined_scores = {1: horizontal_scores[1] + vertical_scores[1] + diagonal_scores[1] + threats[1], 
                            2: horizontal_scores[2] + vertical_scores[2] + diagonal_scores[2] + threats[2]}
         score_difference = combined_scores[1] - combined_scores[2]
         return score_difference
     
-    def detect_immediate_threats(self):
+    def detect_threats(self):
         """Finds chains of 3 same player tokens and evaluates them as immediate threats that should be blocked.
 
 
@@ -294,6 +291,9 @@ class Connect4:
                 for player in [1, 2]:
                     if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
                         scores[player] += 50000
+                    
+                    elif row[col:col+4].count(player) == 2 and row[col:col+4].count(0) == 2:
+                        scores[player] += 20000
 
         for col in range(7):
             for row in range(3):
@@ -302,12 +302,18 @@ class Connect4:
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
                         scores[player] += 50000
 
+                    elif tokens.count(player) == 2 and tokens.count(0) == 2:
+                        scores[player] += 20000
+
         for row in range(3, 6):
             for col in range(4):
                 for player in [1,2]:
                     tokens = [self.board[row-i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
                         scores[player] += 50000
+
+                    elif tokens.count(player) == 2 and tokens.count(0) == 2:
+                        scores[player] += 20000
         
         for row in range(3):
             for col in range(4):
@@ -315,6 +321,9 @@ class Connect4:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
                         scores[player] += 50000
+
+                    elif tokens.count(player) == 2 and tokens.count(0) == 2:
+                        scores[player] += 20000
 
         return scores
 
@@ -333,7 +342,7 @@ class Connect4:
             if len(cells) >= 4:
                 scores[player] += 999999999
             elif len(cells) >= 2:
-                scores[player] += len(cells)
+                scores[player] += (len(cells)*10000)
             handled.update(cells)
         
         for row in reversed(range(6)):
