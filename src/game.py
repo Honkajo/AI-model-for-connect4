@@ -1,5 +1,5 @@
 import random
-import time
+from algorithm import minmax
 
 class Connect4:
     """Class that creates a game of connect4
@@ -31,7 +31,16 @@ class Connect4:
             if self.board[row][col] == 0:
                 return row
         return None
-
+    
+    def print_board(self):
+        """Prints the gameboard
+        """
+        print("1 2 3 4 5 6 7")
+        print("-------------")
+        for row in self.board:
+            print(' '.join(str(cell) for cell in row))
+        print("\n")
+        
     def minmax(self, depth, alpha, beta, maximizingPlayer):
         """Main algorithm that calculates the best moves for ai
 
@@ -82,16 +91,7 @@ class Connect4:
                     if beta <= alpha:
                         break
             return best_col, min_eval
-        
-
     
-    def print_board(self):
-        """Prints the gameboard
-        """
-        for row in self.board:
-            print(' '.join(str(cell) for cell in row))
-        print("\n")
-        
     def start_game(self):
         """Starts the game loop
         """
@@ -114,9 +114,10 @@ class Connect4:
 
                 break
             if current_turn == "ai":
-                chosen_col, _ = self.minmax(5, float('-inf'), float('inf'), True)
+                chosen_col, _ = self.minmax(7, float('-inf'), float('inf'), True)
                 self.make_move(chosen_col + 1, "ai")
                 print("AI has made its move:")
+                print()
                 self.print_board()
                 current_turn = "human"
 
@@ -222,15 +223,19 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 999999999
-                    elif count >= 2:
-                        scores[current] += (count*10000)
+                        scores[current] += 100000
+                    elif count == 3:
+                        scores[current] += 5000
+                    elif count == 2:
+                        scores[current] += 500
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 999999999
-            elif count >= 2:
-                scores[current] += (count*10000)
+                scores[current] += 100000
+            elif count == 3:
+                scores[current] += 5000
+            elif count == 2:
+                scores[current] += 500
         
         return scores
     
@@ -250,15 +255,21 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 999999999
-                    elif count >= 2:
-                        scores[current] += (count*10000)
+                        scores[current] += 100000
+                    elif count == 3:
+                        scores[current] += 5000
+                    elif count == 2:
+                        scores[current] += 500
+                    
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 999999999
-            elif count >= 2:
-                scores[current] += (count*10000)
+                scores[current] += 100000
+            elif count == 3:
+                scores[current] += 5000
+            elif count == 2:
+                scores[current] += 500
+            
         return scores
     
     def evaluate_position(self):
@@ -290,40 +301,40 @@ class Connect4:
             for col in range(4):
                 for player in [1, 2]:
                     if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
-                        scores[player] += 50000
+                        scores[player] += 20000
                     
                     elif row[col:col+4].count(player) == 2 and row[col:col+4].count(0) == 2:
-                        scores[player] += 20000
+                        scores[player] += 2500
 
         for col in range(7):
             for row in range(3):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 50000
+                        scores[player] += 20000
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 20000
+                        scores[player] += 2500
 
         for row in range(3, 6):
             for col in range(4):
                 for player in [1,2]:
                     tokens = [self.board[row-i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 50000
+                        scores[player] += 20000
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 20000
+                        scores[player] += 2500
         
         for row in range(3):
             for col in range(4):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 50000
+                        scores[player] += 20000
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 20000
+                        scores[player] += 2500
 
         return scores
 
@@ -340,9 +351,11 @@ class Connect4:
 
         def process_chain(cells, player, handled):
             if len(cells) >= 4:
-                scores[player] += 999999999
-            elif len(cells) >= 2:
-                scores[player] += (len(cells)*10000)
+                scores[player] += 100000
+            elif len(cells) == 3:
+                scores[player] += 5000
+            elif len(cells) == 2:
+                scores[player] += 500
             handled.update(cells)
         
         for row in reversed(range(6)):
