@@ -12,3 +12,4 @@
 * [Viikko 3](/dokumentaatio/viikkoraportit/viikkoraportti_3.md)
 * [Viikko 4](/dokumentaatio/viikkoraportit/viikkoraportti_4.md)
 * [Viikko 5](/dokumentaatio/viikkoraportit/viikkoraportti_5.md)
+* [Viikko 6](/dokumentaatio/viikkoraportit/viikkoraportti_6.md)
