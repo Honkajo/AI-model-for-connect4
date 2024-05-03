@@ -1,5 +1,5 @@
 import random
-from algorithm import minmax
+import time
 
 class Connect4:
     """Class that creates a game of connect4
@@ -16,6 +16,9 @@ class Connect4:
                       [0, 0, 0, 0, 0, 0, 0]]
         
         self.preferred_cols = [3, 2, 4, 1, 5, 0, 6]
+        self.hash_table = {}
+        self.move_scores = {}
+        self.max_depth = 7
         self.starting_player = None
 
     def get_next_open_row(self, col):
@@ -53,7 +56,11 @@ class Connect4:
         Returns:
             Integer: returns best column for the move and max or min evaluation
         """
-        valid_moves = [col for col in self.preferred_cols if self.is_valid_move(col)]
+        board_key = self.hash_board()
+        if board_key in self.hash_table:
+            return self.hash_table[board_key]
+
+        valid_moves = self.sort_moves([col for col in self.preferred_cols if self.is_valid_move(col)])
         if depth == 0 or self.is_game_over() or not valid_moves:
             evaluation = self.evaluate_position()
             return None, evaluation
@@ -73,6 +80,7 @@ class Connect4:
                     alpha = max(alpha, eval)
                     if alpha >= beta:
                         break
+            self.hash_table[board_key] = (best_col, max_eval)
             return best_col, max_eval
         
         else:
@@ -90,6 +98,7 @@ class Connect4:
                     beta = min(beta, eval)
                     if beta <= alpha:
                         break
+            self.hash_table[board_key] = (best_col, min_eval)
             return best_col, min_eval
     
     def start_game(self):
@@ -111,10 +120,9 @@ class Connect4:
                 else:
                     print("Game over!")
                     print("You win!")
-
                 break
             if current_turn == "ai":
-                chosen_col, _ = self.minmax(7, float('-inf'), float('inf'), True)
+                chosen_col, _ = self.iterative_deepening(15)
                 self.make_move(chosen_col + 1, "ai")
                 print("AI has made its move:")
                 print()
@@ -131,7 +139,7 @@ class Connect4:
                         current_turn = "ai"
                     else:
                         print("Invalid move. Try again!")
-                except ValueError:
+                except IndexError:
                     print("Please enter a number between 1 and 7")
 
     def is_valid_move(self, col):
@@ -225,17 +233,17 @@ class Connect4:
                     if count >= 4:
                         scores[current] += 100000
                     elif count == 3:
-                        scores[current] += 5000
+                        scores[current] += 50
                     elif count == 2:
-                        scores[current] += 500
+                        scores[current] += 5
                     current = cell
                     count = 1
             if count >= 4:
                 scores[current] += 100000
             elif count == 3:
-                scores[current] += 5000
+                scores[current] += 50
             elif count == 2:
-                scores[current] += 500
+                scores[current] += 5
         
         return scores
     
@@ -257,18 +265,18 @@ class Connect4:
                     if count >= 4:
                         scores[current] += 100000
                     elif count == 3:
-                        scores[current] += 5000
+                        scores[current] += 50
                     elif count == 2:
-                        scores[current] += 500
+                        scores[current] += 5
                     
                     current = cell
                     count = 1
             if count >= 4:
                 scores[current] += 100000
             elif count == 3:
-                scores[current] += 5000
+                scores[current] += 50
             elif count == 2:
-                scores[current] += 500
+                scores[current] += 5
             
         return scores
     
@@ -301,40 +309,40 @@ class Connect4:
             for col in range(4):
                 for player in [1, 2]:
                     if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
-                        scores[player] += 20000
+                        scores[player] += 100 if player == 2 else -100
                     
                     elif row[col:col+4].count(player) == 2 and row[col:col+4].count(0) == 2:
-                        scores[player] += 2500
+                        scores[player] += 10 
 
         for col in range(7):
             for row in range(3):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 20000
+                        scores[player] += 100 if player == 2 else -100
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 2500
+                        scores[player] += 10 
 
         for row in range(3, 6):
             for col in range(4):
                 for player in [1,2]:
                     tokens = [self.board[row-i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 20000
+                        scores[player] += 100 if player == 2 else -100
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 2500
+                        scores[player] += 10 
         
         for row in range(3):
             for col in range(4):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 20000
+                        scores[player] += 100 if player == 2 else -100
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 2500
+                        scores[player] += 10 
 
         return scores
 
@@ -353,9 +361,9 @@ class Connect4:
             if len(cells) >= 4:
                 scores[player] += 100000
             elif len(cells) == 3:
-                scores[player] += 5000
+                scores[player] += 50
             elif len(cells) == 2:
-                scores[player] += 500
+                scores[player] += 5
             handled.update(cells)
         
         for row in reversed(range(6)):
@@ -389,6 +397,53 @@ class Connect4:
                         process_chain(negative_slope, current_player, handled_negative)
 
         return scores
+    
+    def iterative_deepening(self, time_limit):
+        """Calculates best moves until time limit or maximum depth is reached
+
+        Args:
+            time_limit (int): Maximum time for algorithm calculation
+
+        Returns:
+            int: Best column for the next move and evaluation score for that move
+        """
+        best_col = None
+        best_eval = float('-inf')
+        start_time = time.time()
+
+        depth = 1
+
+        while time.time() - start_time < time_limit:
+            current_col, current_eval = self.minmax(depth, float('-inf'), float('inf'), True)
+            if current_eval > best_eval:
+                best_eval = current_eval
+                best_col = current_col
+                self.move_scores[best_col] = best_eval
+            depth += 1
+            if depth > self.max_depth:
+                break
+        
+        return best_col, best_eval
+
+    def sort_moves(self, moves):
+        """Sorts moves based on board evaluation scores after the move is done. These moves are sorted out so that the highest value evaluation score for the board after 
+        the move is done is prioritized
+
+        Args:
+            moves (list): list of different valid moves
+
+        Returns:
+            list: sorted and reversed list based on board evaluation values
+        """
+        return sorted(moves, key=lambda col: self.move_scores.get(col, 0), reverse=True)
+
+    def hash_board(self):
+        """String form of board state
+
+        Returns:
+            String: board state as a string form
+        """
+        return str(self.board)
 
 
 if __name__ =="__main__":
