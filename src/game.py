@@ -19,7 +19,7 @@ class Connect4:
         self.hash_table = {}
         self.move_scores = {}
         self.max_depth = 7
-        self.starting_player = None
+        self.current_turn = None
 
     def get_next_open_row(self, col):
         """Used in minmax-function to find the next open row when evaluating next moves for ai
@@ -108,39 +108,42 @@ class Connect4:
         self.print_board()
     
         players = ["ai", "human"]
-        self.starting_player = random.choice(players)
-        current_turn = self.starting_player
-        print(f"Starting player: {self.starting_player}")
+        self.current_turn = random.choice(players)
+        
+        print(f"Starting player: {self.current_turn}")
         
         while True:
             if self.is_game_over():
-                if current_turn == "human":
+                if self.current_turn == "human":
                     print("Game over!")
                     print("You lose!")
                 else:
                     print("Game over!")
                     print("You win!")
                 break
-            if current_turn == "ai":
+            if self.current_turn == "ai":
                 chosen_col, _ = self.iterative_deepening(15)
                 self.make_move(chosen_col + 1, "ai")
                 print("AI has made its move:")
                 print()
                 self.print_board()
-                current_turn = "human"
+                self.current_turn = "human"
 
             else:
                 try:
                     chosen_col = int(input(f"Choose your move(1-7):  "))
-                    if self.is_valid_move(chosen_col - 1):
+                    if self.is_valid_move(chosen_col - 1) and chosen_col >= 1 and chosen_col <= 7:
                         self.make_move(chosen_col, "human")
                         print("You made your move:")
                         self.print_board()
-                        current_turn = "ai"
+                        self.current_turn = "ai"
                     else:
                         print("Invalid move. Try again!")
                 except IndexError:
                     print("Please enter a number between 1 and 7")
+                except ValueError:
+                    print("Please enter a number between 1 and 7")
+
 
     def is_valid_move(self, col):
         """Checks if move for the column is possible to make
@@ -202,6 +205,7 @@ class Connect4:
             for col in range(3, 7):
                 if self.board[row][col] == self.board[row - 1][col - 1] == self.board[row - 2][col - 2] == self.board[row - 3][col - 3] != 0:
                     return True
+        return False
                 
     def is_game_over(self):
         """Checks if a game is over
@@ -231,19 +235,19 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 100000
+                        scores[current] += 1000
                     elif count == 3:
-                        scores[current] += 50
+                        scores[current] += 100
                     elif count == 2:
-                        scores[current] += 5
+                        scores[current] += 10
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 100000
+                scores[current] += 1000
             elif count == 3:
-                scores[current] += 50
+                scores[current] += 100
             elif count == 2:
-                scores[current] += 5
+                scores[current] += 10
         
         return scores
     
@@ -263,20 +267,20 @@ class Connect4:
                     count += 1
                 else:
                     if count >= 4:
-                        scores[current] += 100000
+                        scores[current] += 1000
                     elif count == 3:
-                        scores[current] += 50
+                        scores[current] += 100
                     elif count == 2:
-                        scores[current] += 5
+                        scores[current] += 10
                     
                     current = cell
                     count = 1
             if count >= 4:
-                scores[current] += 100000
+                scores[current] += 1000
             elif count == 3:
-                scores[current] += 50
+                scores[current] += 100
             elif count == 2:
-                scores[current] += 5
+                scores[current] += 10
             
         return scores
     
@@ -308,41 +312,54 @@ class Connect4:
         for row in self.board:
             for col in range(4):
                 for player in [1, 2]:
-                    if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
-                        scores[player] += 100 if player == 2 else -100
+                    if row[col:col+4].count(player) == 4:
+                        scores[player] += 10000
+                    
+                    elif row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
+                        scores[player] += 10000 
                     
                     elif row[col:col+4].count(player) == 2 and row[col:col+4].count(0) == 2:
-                        scores[player] += 10 
+                        scores[player] += 100 
 
         for col in range(7):
             for row in range(3):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col] for i in range(4)]
-                    if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 100 if player == 2 else -100
+
+                    if tokens.count(player) == 4:
+                        scores[player] += 10000
+                    
+                    elif tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 10000
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 10 
+                        scores[player] += 100
 
         for row in range(3, 6):
             for col in range(4):
                 for player in [1,2]:
                     tokens = [self.board[row-i][col+i] for i in range(4)]
-                    if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 100 if player == 2 else -100
+                    if tokens.count(player) == 4:
+                        scores[player] += 10000
+                    
+                    elif tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 10000 
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 10 
+                        scores[player] += 100
         
         for row in range(3):
             for col in range(4):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
+                    if tokens.count(player) == 4:
+                        scores[player] += 10000
+                    
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 100 if player == 2 else -100
+                        scores[player] += 10000 
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
-                        scores[player] += 10 
+                        scores[player] += 100
 
         return scores
 
@@ -359,11 +376,11 @@ class Connect4:
 
         def process_chain(cells, player, handled):
             if len(cells) >= 4:
-                scores[player] += 100000
+                scores[player] += 1000
             elif len(cells) == 3:
-                scores[player] += 50
+                scores[player] += 100
             elif len(cells) == 2:
-                scores[player] += 5
+                scores[player] += 10
             handled.update(cells)
         
         for row in reversed(range(6)):
@@ -413,7 +430,9 @@ class Connect4:
 
         depth = 1
 
-        while time.time() - start_time < time_limit:
+        while True: 
+            if time.time() - start_time >= time_limit:
+                break
             current_col, current_eval = self.minmax(depth, float('-inf'), float('inf'), True)
             if current_eval > best_eval:
                 best_eval = current_eval
