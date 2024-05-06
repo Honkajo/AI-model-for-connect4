@@ -311,11 +311,8 @@ class Connect4:
         for row in self.board:
             for col in range(4):
                 for player in [1, 2]:
-                    if row[col:col+4].count(player) == 4:
-                        scores[player] += 10000
-                    
-                    elif row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
-                        scores[player] += 10000 
+                    if row[col:col+4].count(player) == 3 and row[col:col+4].count(0) == 1:
+                        scores[player] += 100 
                     
                     elif row[col:col+4].count(player) == 2 and row[col:col+4].count(0) == 2:
                         scores[player] += 100 
@@ -324,12 +321,8 @@ class Connect4:
             for row in range(3):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col] for i in range(4)]
-
-                    if tokens.count(player) == 4:
-                        scores[player] += 10000
-                    
-                    elif tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 10000
+                    if tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 100
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
                         scores[player] += 100
@@ -338,11 +331,8 @@ class Connect4:
             for col in range(4):
                 for player in [1,2]:
                     tokens = [self.board[row-i][col+i] for i in range(4)]
-                    if tokens.count(player) == 4:
-                        scores[player] += 10000
-                    
-                    elif tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 10000 
+                    if tokens.count(player) == 3 and tokens.count(0) == 1:
+                        scores[player] += 100 
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
                         scores[player] += 100
@@ -351,9 +341,6 @@ class Connect4:
             for col in range(4):
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
-                    if tokens.count(player) == 4:
-                        scores[player] += 10000
-                    
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
                         scores[player] += 10000 
 
