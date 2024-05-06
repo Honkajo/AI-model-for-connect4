@@ -17,8 +17,7 @@ class Connect4:
         
         self.preferred_cols = [3, 2, 4, 1, 5, 0, 6]
         self.hash_table = {}
-        self.move_scores = {}
-        self.max_depth = 7
+        self.move_scores = {}                              
         self.current_turn = None
 
     def get_next_open_row(self, col):
@@ -439,8 +438,6 @@ class Connect4:
                 best_col = current_col
                 self.move_scores[best_col] = best_eval
             depth += 1
-            if depth > self.max_depth:
-                break
         
         return best_col, best_eval
 
