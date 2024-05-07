@@ -342,7 +342,7 @@ class Connect4:
                 for player in [1, 2]:
                     tokens = [self.board[row+i][col+i] for i in range(4)]
                     if tokens.count(player) == 3 and tokens.count(0) == 1:
-                        scores[player] += 10000 
+                        scores[player] += 100 
 
                     elif tokens.count(player) == 2 and tokens.count(0) == 2:
                         scores[player] += 100
@@ -414,7 +414,7 @@ class Connect4:
         best_eval = float('-inf')
         start_time = time.time()
 
-        depth = 1
+        depth = 3
 
         while True: 
             if time.time() - start_time >= time_limit:
