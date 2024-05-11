@@ -1,6 +1,6 @@
 # Yleisrakenne
 
-Ohjelmisto toteutetaan kolmessa moduulissa: käyttöliittymä, algoritmi sekä pelisilmukka.
+Ohjelma toteutetaan sen yksinkertaisuuden vuoksi yhdessä moduulissa
 
 ## Käytettävyys
 
@@ -8,6 +8,5 @@ Sovellusta käytetään komentoriviltä valitsemalla siirto numeroilla 1-7 ja pe
 
 ## Puutteita
 
--Tekoälyn siirtoanalyysien aikakatkaisu
-
--Evaluointifunktion tehokas toiminta
+- Evaluointifunktion tehokkaampi arviointi
+- Algoritmin nopeampi laskenta
