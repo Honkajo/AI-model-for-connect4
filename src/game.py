@@ -44,11 +44,13 @@ def iterative_deepening(board, alpha, beta, max_player, time_limit, player_piece
     """
     hash_map = {}
     start_time = time.time()
-    depth = 1
+    depth = 3
+    best_col = 3
     while True:
-        best_col, _ = minimax(board, depth, alpha, beta, max_player, player_piece, ai_piece, hash_map)
+        new_col, _ = minimax(board, depth, alpha, beta, max_player, player_piece, ai_piece, hash_map)
         if time.time() - start_time > time_limit:
             break
+        best_col = new_col if new_col is not None else best_col
         depth += 1
     return best_col
 
@@ -230,7 +232,7 @@ def valid_moves(board):
     Returns:
         list: list of column numbers where piece can be placed
     """
-
+    PREFERRED_COLS = [3, 2, 4, 1, 5, 0, 6]
     return [col for col in PREFERRED_COLS if is_valid_move(board, col)]
 
 def evaluate_position(board, piece, player_piece, ai_piece):
@@ -307,58 +309,64 @@ def evaluate_position(board, piece, player_piece, ai_piece):
 
     return value
 
+def get_player_move():
+    return int(input("Choose your move(1-7):  ")) - 1
+
 """Game loop for the Connect4 game"""
+def game_loop():
+    PLAYER_PIECE = 1
+    AI_PIECE = 2
+    PLAYERS = ["AI", "PLAYER"]
+    TURN = random.choice(PLAYERS)
 
-PLAYER_PIECE = 1
-AI_PIECE = 2
-PLAYERS = ["AI", "PLAYER"]
-TURN = random.choice(PLAYERS)
+    BOARD = [[0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0]]
 
-BOARD = [[0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0]]
+    PREFERRED_COLS = [3, 2, 4, 1, 5, 0, 6]
 
-PREFERRED_COLS = [3, 2, 4, 1, 5, 0, 6]
+    while True:
+        if full_board(BOARD):
+            print("It's a draw!")
+            break
 
-while True:
-    if full_board(BOARD):
-        print("It's a draw!")
-        break
+        if TURN == "PLAYER":
+            print_board(BOARD)
+            try:
+                COLUMN = get_player_move()
+                if is_valid_move(BOARD, COLUMN) and COLUMN >= 0 and COLUMN <= 7:
+                    row = get_next_open_row(BOARD, COLUMN)
+                    make_move(BOARD, row, COLUMN, PLAYER_PIECE)
+                    if is_game_over(BOARD, (row, COLUMN)):
+                        print_board(BOARD)
+                        print("Game over!")
+                        print("You win!")
+                        break
+                    TURN = "AI"
+                else:
+                    print("Invalid move. Try again!")
+            except IndexError:
+                print("Please enter a number between 1 and 7")
+            except ValueError:
+                print("Please enter a number between 1 and 7")
 
-    if TURN == "PLAYER":
-        print_board(BOARD)
-        try:
-            COLUMN = int(input("Choose your move(1-7):  ")) - 1
-            if is_valid_move(BOARD, COLUMN - 1) and COLUMN >= 0 and COLUMN <= 7:
+        if TURN == "AI":
+            COLUMN = iterative_deepening(
+                BOARD, float('-inf'), float('inf'), True,
+                5, PLAYER_PIECE, AI_PIECE)
+
+            if is_valid_move(BOARD, COLUMN + 1):
                 row = get_next_open_row(BOARD, COLUMN)
-                make_move(BOARD, row, COLUMN, PLAYER_PIECE)
+                make_move(BOARD, row, COLUMN, AI_PIECE)
                 if is_game_over(BOARD, (row, COLUMN)):
                     print_board(BOARD)
                     print("Game over!")
-                    print("You win!")
+                    print("You lose!")
                     break
-                TURN = "AI"
-            else:
-                print("Invalid move. Try again!")
-        except IndexError:
-            print("Please enter a number between 1 and 7")
-        except ValueError:
-            print("Please enter a number between 1 and 7")
+                TURN = "PLAYER"
 
-    if TURN == "AI":
-        COLUMN = iterative_deepening(
-            BOARD, float('-inf'), float('inf'), True,
-              5, PLAYER_PIECE, AI_PIECE)
-
-        if is_valid_move(BOARD, COLUMN):
-            row = get_next_open_row(BOARD, COLUMN)
-            make_move(BOARD, row, COLUMN, AI_PIECE)
-            if is_game_over(BOARD, (row, COLUMN)):
-                print_board(BOARD)
-                print("Game over!")
-                print("You lose!")
-                break
-            TURN = "PLAYER"
+if __name__=="__main__":
+    game_loop()
