@@ -47,7 +47,8 @@ def iterative_deepening(board, alpha, beta, max_player, time_limit, player_piece
     depth = 3
     best_col = 3
     while True:
-        new_col, _ = minimax(board, depth, alpha, beta, max_player, player_piece, ai_piece, hash_map)
+        new_col, _ = minimax(board, depth, alpha, beta, 
+                             max_player, player_piece, ai_piece, hash_map)
         if time.time() - start_time > time_limit:
             break
         best_col = new_col if new_col is not None else best_col
@@ -138,7 +139,6 @@ def minimax(board, depth, alpha, beta, max_player, player_piece, ai_piece, hash_
 
         hash_map[board_key] = column
         return column, value
-
     
 def is_game_over(board, last_move):
     """Determines if the game has ended to a winning position
