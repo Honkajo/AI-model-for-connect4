@@ -4,6 +4,8 @@ Yksikkötestauksessa käytetään Unittest-kehystä. Testeissä testataan monipu
 
 ## Testikattavuus
 
-![kuva](https://github.com/Honkajo/AI-model-for-connect4/assets/120728319/5e330958-759c-4f21-a8f1-9269dcaccef8)
+![kuva](https://github.com/Honkajo/AI-model-for-connect4/assets/120728319/6054526f-06dd-43c0-8fa9-124a6db9e7d3)
+
+
 
 
